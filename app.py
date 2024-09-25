@@ -21,5 +21,11 @@ if prompt := st.chat_input("What is up?"):
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         st.markdown(response)
+        with st.expander("See details"):
+                    st.json({
+                        "Reference": result.get('referenced_document', 'N/A'),
+                        "Status Code": result.get('statusCode', 'N/A'),
+                        "Source": result.get('file_location', 'N/A')
+                    })
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
