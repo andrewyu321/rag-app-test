@@ -1,5 +1,9 @@
 import streamlit as st
-st.title("Echo Bot")
+
+st.set_page_config(page_title="BA Group LLM", page_icon="🧠", layout="wide")
+
+st.title("BA Group LLM Assistant")
+
 
 # Initialize chat history
 if "messages" not in st.session_state:
