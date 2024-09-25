@@ -46,7 +46,7 @@ if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    result = call_api(user_question)
+    result = call_api(prompt)
 
     response = result.get('generated_response', 'No response body available')
     # Display assistant response in chat message container
