@@ -1,4 +1,8 @@
 import streamlit as st
+import requests
+import json
+# from streamlit_lottie import st_lottie
+import time
 
 st.set_page_config(page_title="BA Group LLM", page_icon="🧠", layout="wide")
 
@@ -22,7 +26,9 @@ if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    response = f"Echo: {prompt}"
+    result = call_api(user_question)
+
+    response = result.get('generated_response', 'No response body available')
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         st.markdown(response)
