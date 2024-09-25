@@ -9,6 +9,26 @@ st.set_page_config(page_title="BA Group LLM", page_icon="🧠", layout="wide")
 st.title("BA Group LLM Assistant")
 
 
+
+
+# Function to call the API
+def call_api(query):
+    # Replace with your actual API endpoint
+    
+    api_url = st.secrets["API_KEY"]
+
+    try:
+        params = {"prompt": query}
+        response = requests.get(api_url, params=params)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        return response.json()  # This should now work correctly
+    except requests.exceptions.RequestException as e:
+        st.error(f"An error occurred while calling the API: {str(e)}")
+        return None
+    except json.JSONDecodeError as e:
+        st.error(f"Error decoding JSON response: {str(e)}")
+        return None
+
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
