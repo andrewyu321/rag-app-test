@@ -52,7 +52,7 @@ def call_api(chat_history, prompt):
     #api_url = "https://8114cdz0v4.execute-api.us-east-1.amazonaws.com/dev/"
 
     #post API
-    api_url = "https://8114cdz0v4.execute-api.us-east-1.amazonaws.com/dev/"
+    api_url = st.secrets["API_KEY"]
 
     prompt_with_history = {"conversation": chat_history,
                            "prompt": prompt
