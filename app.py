@@ -99,12 +99,6 @@ if prompt := st.chat_input("What is up?"):
 
 
     if streaming_on:
-
-        st.warning("Streaming is not supported in this example.")
-    else:
-
-
-
         result = call_api(conversation_history, prompt)
 
         assistant_response = result.get('generated_response')
@@ -149,6 +143,10 @@ if prompt := st.chat_input("What is up?"):
         #     else:
         #         st.error("Failed to get a response from the API")
         #         st.write(st.session_state.chat_history)
+        
+
+    else:
+        st.warning("Streaming is not supported in this example.")
 
 
-
+      
