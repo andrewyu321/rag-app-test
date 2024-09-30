@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import requests
 import json
@@ -21,7 +19,6 @@ def clear_screen():
 
 with st.sidebar:
     st.title("BA Group LLM Assistant")
-    streaming_on = st.toggle('Streaming')
     st.button('Clear Screen', on_click=clear_screen)
 
 
@@ -35,7 +32,16 @@ def get_conversation_history():
         conversation += f"{role}: {message['content']}\n"
     return conversation
 
-
+def typewriter_effect(text, speed=0.05):
+    """
+    Display the text with a typewriter effect (one character at a time).
+    """
+    placeholder = st.empty()  # Create a placeholder to update the text dynamically
+    typed_text = ""
+    for char in text:
+        typed_text += char
+        placeholder.markdown(typed_text)  # Update the placeholder with the current text
+        time.sleep(speed)  # Pause between characters to create the typing effect
 
 
 # Function to call the API
@@ -46,7 +52,7 @@ def call_api(chat_history, prompt):
     #api_url = "https://8114cdz0v4.execute-api.us-east-1.amazonaws.com/dev/"
 
     #post API
-    api_url = st.secrets["API_KEY"]
+    api_url = "https://8114cdz0v4.execute-api.us-east-1.amazonaws.com/dev/"
 
     prompt_with_history = {"conversation": chat_history,
                            "prompt": prompt
@@ -98,55 +104,50 @@ if prompt := st.chat_input("What is up?"):
         st.write(prompt)
 
 
-    if streaming_on:
-        result = call_api(conversation_history, prompt)
-
-        assistant_response = result.get('generated_response')
-
-        with st.chat_message("AI"):
-            st.write(assistant_response)
-
-    
-
-            with st.expander("See Details"):
-                st.json({
-                    # "Reference": result.get('referenced_document', conversation_history),
-                    "Referenced Document": result.get('referenced_document'),
-                    "Status Code": result.get('statusCode', 'N/A'),
-                    "Source": result.get('file_location', 'N/A')
 
 
 
 
+    result = call_api(conversation_history, prompt)
+
+    assistant_response = result.get('generated_response')
+
+    with st.chat_message("AI"):
+        st.write(assistant_response)
+
+
+
+        with st.expander("See Details"):
+            st.json({
+                # "Reference": result.get('referenced_document', conversation_history),
+                "Referenced Document": result.get('referenced_document'),
+                "Status Code": result.get('statusCode', 'N/A'),
+                "Source": result.get('file_location', 'N/A')
                 })
 
 
-        st.session_state.chat_history.append({"role": "AI", "content": assistant_response})
+    st.session_state.chat_history.append({"role": "AI", "content": assistant_response})
 
-        # # Chain - Invoke the API using the call_api function
-        # with st.chat_message("assistant"):
-        #     result = call_api(prompt, st.session_state.chat_history)
-        #     if result:
-        #         assistant_response = result.get('generated_response')
-        #
-        #         # Display the assistant's response
-        #         st.write(assistant_response)
-        #
-        #         with st.expander("See details"):
-        #             st.json({
-        #                 "Reference": result.get('referenced_document', 'N/A'),
-        #                 "Status Code": result.get('statusCode', 'N/A'),
-        #                 "Source": result.get('file_location', 'N/A')
-        #             })
-        #
-        #         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
-        #     else:
-        #         st.error("Failed to get a response from the API")
-        #         st.write(st.session_state.chat_history)
-        
-
-    else:
-        st.warning("Streaming is not supported in this example.")
+    # # Chain - Invoke the API using the call_api function
+    # with st.chat_message("assistant"):
+    #     result = call_api(prompt, st.session_state.chat_history)
+    #     if result:
+    #         assistant_response = result.get('generated_response')
+    #
+    #         # Display the assistant's response
+    #         st.write(assistant_response)
+    #
+    #         with st.expander("See details"):
+    #             st.json({
+    #                 "Reference": result.get('referenced_document', 'N/A'),
+    #                 "Status Code": result.get('statusCode', 'N/A'),
+    #                 "Source": result.get('file_location', 'N/A')
+    #             })
+    #
+    #         st.session_state.messages.append({"role": "assistant", "content": assistant_response})
+    #     else:
+    #         st.error("Failed to get a response from the API")
+    #         st.write(st.session_state.chat_history)
 
 
-      
+
